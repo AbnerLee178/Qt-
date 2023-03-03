@@ -1,2 +1,3 @@
-# Qt-
+# Qt-MyCalculator
 用Qt6.4.2C++开发的简易计算器，能实现基本的四则运算，功能还不完善，欢迎继续增加功能。
+This program is developmented by Qt6.4.2 C++.
