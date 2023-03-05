@@ -136,7 +136,7 @@ void MyCalculator::on_divhButton_clicked()
 
 void MyCalculator::on_equalButton_clicked()
 {
-    QStack<int> s_num,s_opt;
+    QStack<int> s_num,s_opt;//栈
     char opt[128] = {0};
     int i = 0, tmp = 0, num1 = 0, num2 = 0;
 
@@ -147,7 +147,7 @@ void MyCalculator::on_equalButton_clicked()
 
     while(opt[i] != '\0' || s_opt.empty() != true)
     {
-        if(opt[i] >= '0' && opt[i] <= '9')//判断是否为数值
+        if(opt[i] >= '0' && opt[i] <= '9')
         {
             tmp = tmp * 10 + opt[i] - '0';
             i++;
@@ -155,10 +155,9 @@ void MyCalculator::on_equalButton_clicked()
             {
                 s_num.push(tmp);
                 tmp = 0;
-
             }
         }
-        else  //判断是否为运算符号
+        else
         {
             if(s_opt.empty() == true || Priority(opt[i]) > Priority (s_opt.top()) || (s_opt.top() == '(' && opt[i] != ')'))
             {
@@ -166,13 +165,13 @@ void MyCalculator::on_equalButton_clicked()
                 i++;
                 continue;
             }
-            if(s_opt.top() == '(' && opt[i] == ')')
+            if(s_opt.top() == '(' && opt[i] == ')')//取出括号
             {
                 s_opt.pop();
                 i++;
                 continue;
             }
-
+            //比较相邻操作符的优先级，根据优先级进行相应的运算操作
             if(Priority(opt[i]) <= Priority(s_opt.top()) || (opt[i] == ')' && s_opt.top() != '(') || (opt[i] == '\0' && s_opt.empty() != true))
             {
 
@@ -203,10 +202,23 @@ void MyCalculator::on_equalButton_clicked()
                         break;
                     case '/'://栈是先进后出，要交换位置
                         num1 = s_num.top();
-                        s_num.pop();
-                        num2 = s_num.top();
-                        s_num.pop();
-                        s_num.push(num2 / num1);
+                        if (num1 != 0)
+                        {
+                            s_num.pop();
+                            num2 = s_num.top();
+                            s_num.pop();
+                            s_num.push(num2 / num1);
+                        }
+                        else
+                        {
+                            QMessageBox msgbox;
+                            msgbox.setText("错误提示");
+                            msgbox.setWindowModality(Qt::NonModal);
+                            msgbox.setInformativeText("除数不能为零，请重新输入数据");
+                            msgbox.setStandardButtons(QMessageBox::Cancel);
+                            msgbox.setDefaultButton(QMessageBox::Cancel);
+                            int ret = msgbox.exec();
+                        }
                         break;
 
                 }
